@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxRandom;
 import flixel.group.FlxGroup;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -12,6 +13,7 @@ class PlayState extends FlxState
 {
 	private var bat: FlxSprite;
 	private var walls: FlxGroup;
+	private var ball: FlxSprite;
 
 	override public function create():Void
 	{
@@ -19,6 +21,7 @@ class PlayState extends FlxState
 
 		createBat();
 		createWalls();
+		createBall();
 	}
 
 	private function createBat(): Void
@@ -45,6 +48,16 @@ class PlayState extends FlxState
 		top.makeGraphic(640, 20, 0xff999999);
 		walls.add(top);
 	}
+
+	private function createBall(): Void
+	{
+		ball = new FlxSprite(300, 220);
+		ball.makeGraphic(20, 20, 0xffaa2200);
+		ball.maxVelocity.set(300, 300);
+		ball.velocity.x = FlxRandom.intRanged(-200, 200);
+		ball.velocity.y = 300;
+		add(ball);
+	}
 	
 	override public function destroy():Void
 	{
@@ -56,7 +69,6 @@ class PlayState extends FlxState
 		super.update();
 
 		moveBat();
-
 	}
 
 	private function moveBat(): Void
