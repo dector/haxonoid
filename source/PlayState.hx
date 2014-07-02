@@ -17,6 +17,7 @@ class PlayState extends FlxState
 	private var bat: FlxSprite;
 	private var walls: FlxGroup;
 	private var ball: FlxSprite;
+	private var bricks: FlxGroup;
 
 	override public function create():Void
 	{
@@ -25,6 +26,7 @@ class PlayState extends FlxState
 		createBat();
 		createWalls();
 		createBall();
+		createBricks();
 	}
 
 	private function createBat(): Void
@@ -58,13 +60,29 @@ class PlayState extends FlxState
 
 	private function createBall(): Void
 	{
-		ball = new FlxSprite(300, 220);
+		ball = new FlxSprite(310, 320);
 		ball.makeGraphic(20, 20, 0xffaa2200);
 		ball.elasticity = 1;
 		ball.maxVelocity.set(300, 300);
-		ball.velocity.x = FlxRandom.intRanged(-200, 200);
 		ball.velocity.y = 300;
 		add(ball);
+	}
+
+	private function createBricks(): Void
+	{
+		bricks = new FlxGroup();
+		add(bricks);
+
+		for (i in 0...7)
+		{
+			for (j in 0...4)
+			{
+				var brick = new FlxSprite(i * (60 + 5) + 30 + 65, j * (40 + 5) + 30 + 45);
+				brick.makeGraphic(60, 40, 0xff00aa00);
+				brick.immovable = true;
+				bricks.add(brick);
+			}
+		}
 	}
 	
 	override public function destroy():Void
@@ -109,6 +127,7 @@ class PlayState extends FlxState
 	{
 		FlxG.collide(ball, walls);
 		FlxG.collide(ball, bat, beatHappens);
+		FlxG.collide(ball, bricks, beatBrick);
 	}
 
 	private function beatHappens(ball: FlxObject, bat: FlxObject): Void
@@ -117,6 +136,19 @@ class PlayState extends FlxState
 		var ballmid = ball.x + ball.width / 2;
 		var diff;
 
-		ball.velocity.x = 10 * (ballmid - batmid);
+		if (batmid != ballmid)
+		{
+			ball.velocity.x = 10 * (ballmid - batmid);
+		}
+		else
+		{
+			var diff = cast(bat.width / 4 - ball.width / 4, Int);
+			ball.velocity.x = 10 * FlxRandom.intRanged(-diff, diff);
+		}
+	}
+
+	private function beatBrick(ball: FlxObject, brick: FlxObject): Void
+	{
+		brick.kill();
 	}
 }
