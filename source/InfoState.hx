@@ -47,8 +47,10 @@ class InfoState extends FlxState
 			switch (Context.gameState)
 			{
 				case Context.GAME_OVER:
+                    FlxG.sound.pause();
 					FlxG.switchState(new PlayState());
 				case Context.WINNER:
+                    FlxG.sound.pause();
 					FlxG.switchState(new MenuState());
 			}
 		}

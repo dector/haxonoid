@@ -158,7 +158,7 @@ class PlayState extends FlxState
 
 	private function checkCollisions(): Void
 	{
-		FlxG.collide(ball, walls);
+		FlxG.collide(ball, walls, beatWall);
 		FlxG.collide(ball, bat, beatHappens);
 		FlxG.collide(ball, bricks, beatBrick);
 	}
@@ -169,17 +169,24 @@ class PlayState extends FlxState
 		{
 			Context.gameState = Context.GAME_OVER;
 			FlxG.camera.fade(0xff000000, 1, false, gotoHellOrHeaven, true);
+            FlxG.sound.playMusic("assets/fail.wav", 1, false);
 		}
 	}
 
 	private function checkHeaven(): Void
 	{
-		if (bricks.countLiving() <= 0 || FlxG.keys.justPressed.ENTER)
+		if (bricks.countLiving() <= 0)
 		{
 			Context.gameState = Context.WINNER;
 			FlxG.camera.fade(0xffffffff, 1, false, gotoHellOrHeaven, true);
+            FlxG.sound.playMusic("assets/win.wav", 1, false);
 		}
 	}
+
+    private function beatWall(ball: FlxObject, wall: FlxObject): Void
+    {
+        FlxG.sound.play("assets/bat.wav");
+    }
 
 	private function beatHappens(ball: FlxObject, bat: FlxObject): Void
 	{
@@ -196,6 +203,8 @@ class PlayState extends FlxState
 			var diff = cast(bat.width / 4 - ball.width / 4, Int);
 			ball.velocity.x = 10 * FlxRandom.intRanged(-diff, diff);
 		}
+
+        FlxG.sound.play("assets/bat.wav");
 	}
 
 	private function beatBrick(ball: FlxObject, brick: FlxObject): Void
@@ -205,6 +214,8 @@ class PlayState extends FlxState
 		emitter.x = brick.x + brick.width / 2;
 		emitter.y = brick.y + brick.height / 2;
 		emitter.start(true, 2);
+
+        FlxG.sound.play("assets/brick.wav");
 	}
 
 	private function gotoHellOrHeaven(): Void
