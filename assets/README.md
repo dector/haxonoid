@@ -1,0 +1,1 @@
+Awesome [Cat Fighter Sprite Sheet](http://opengameart.org/content/cat-fighter-sprite-sheet) by [dogchicken](http://opengameart.org/users/dogchicken)
