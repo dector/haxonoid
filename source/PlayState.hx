@@ -9,9 +9,20 @@ import flixel.util.FlxMath;
 
 class PlayState extends FlxState
 {
+	private var bat: FlxSprite;
+
 	override public function create():Void
 	{
 		super.create();
+
+		createBat();
+	}
+
+	private function createBat(): Void
+	{
+		bat = new FlxSprite(270, 420);
+		bat.makeGraphic(100, 20, 0xffffffff);
+		add(bat);
 	}
 	
 	override public function destroy():Void
