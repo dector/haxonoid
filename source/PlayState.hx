@@ -1,5 +1,8 @@
 package;
 
+import flixel.FlxObject;
+import flixel.FlxObject;
+import flixel.util.FlxRandom;
 import flixel.util.FlxRandom;
 import flixel.group.FlxGroup;
 import flixel.FlxG;
@@ -69,6 +72,7 @@ class PlayState extends FlxState
 		super.update();
 
 		moveBat();
+		checkCollisions();
 	}
 
 	private function moveBat(): Void
@@ -94,5 +98,20 @@ class PlayState extends FlxState
 		{
 			bat.x = 540;
 		}
+	}
+
+	private function checkCollisions(): Void
+	{
+		FlxG.collide(ball, walls);
+		FlxG.collide(ball, bat, beatHappens);
+	}
+
+	private function beatHappens(ball: FlxObject, bat: FlxObject): Void
+	{
+		var batmid = bat.x + bat.width / 2;
+		var ballmid = ball.x + ball.width / 2;
+		var diff;
+
+		ball.velocity.x = 10 * (ballmid - batmid);
 	}
 }
