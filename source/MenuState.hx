@@ -20,13 +20,13 @@ class MenuState extends FlxState
 	{
 		super.create();
 
-		FlxG.camera.bgColor = 0xff222222;
+		FlxG.camera.bgColor = 0xff29745c;
 
-		menuValue1 = new TwoStateText(20, 200, 600, "> " + MENU_START + " <", 15);
+		menuValue1 = new TwoStateText(20, 200, 600, "> " + MENU_START + " <", 25);
 		menuValue1.antialiasing = true;
 		menuValue1.alignment = "center";
 
-		menuValue2 = new TwoStateText(20, 240, 600, MENU_CATS, 15);
+		menuValue2 = new TwoStateText(20, 240, 600, MENU_CATS, 25);
 		menuValue2.antialiasing = true;
 		menuValue2.alignment = "center";
 

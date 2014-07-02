@@ -4,8 +4,8 @@ import flixel.text.FlxText;
 
 class TwoStateText extends FlxText
 {
-	private static inline var SELECTED_COLOR: Int = 0xffff0000;
-	private static inline var NORMAL_COLOR: Int = 0xffffffff;
+	private static inline var SELECTED_COLOR: Int = 0xff5b9836;
+	private static inline var NORMAL_COLOR: Int = 0xff034932;
 
 	private var _selected: Bool;
 	public var selected(get, set): Bool;
@@ -34,5 +34,7 @@ class TwoStateText extends FlxText
 	public function new(X:Float = 0, Y:Float = 0, FieldWidth:Float = 0, ?Text:String, Size:Int = 8)
 	{
 		super(X, Y, FieldWidth, Text, Size);
+
+        selected = selected;
 	}
 }
