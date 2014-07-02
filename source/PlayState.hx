@@ -33,5 +33,33 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
-	}	
+
+		moveBat();
+
+	}
+
+	private function moveBat(): Void
+	{
+		if (FlxG.keys.pressed.LEFT && bat.x > 0)
+		{
+			bat.velocity.x = -500;
+		}
+		else if (FlxG.keys.pressed.RIGHT && bat.x < 540)
+		{
+			bat.velocity.x = 500;
+		}
+		else
+		{
+			bat.velocity.x = 0;
+		}
+
+		if (bat.x < 0)
+		{
+			bat.x = 0;
+		}
+		else if (bat.x > 540)
+		{
+			bat.x = 540;
+		}
+	}
 }
