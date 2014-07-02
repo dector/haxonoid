@@ -14,6 +14,8 @@ import flixel.util.FlxMath;
 
 class PlayState extends FlxState
 {
+	private static var BRICK_COLOR(default, null) = [ 0xffa03951, 0xffae643e, 0xff29745c, 0xff5b9836 ];
+
 	private var bat: FlxSprite;
 	private var walls: FlxGroup;
 	private var ball: FlxSprite;
@@ -22,6 +24,8 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+
+		FlxG.camera.bgColor = 0xff276004;
 
 		createBat();
 		createWalls();
@@ -32,7 +36,7 @@ class PlayState extends FlxState
 	private function createBat(): Void
 	{
 		bat = new FlxSprite(270, 420);
-		bat.makeGraphic(100, 20, 0xffffffff);
+		bat.makeGraphic(100, 20, 0xff034932);
 		bat.immovable = true;
 		add(bat);
 	}
@@ -43,17 +47,17 @@ class PlayState extends FlxState
 		add(walls);
 
 		var left = new FlxSprite(0, 0);
-		left.makeGraphic(20, 480, 0xff999999);
+		left.makeGraphic(20, 480, 0xff034932);
 		left.immovable = true;
 		walls.add(left);
 
 		var right = new FlxSprite(620, 0);
-		right.makeGraphic(20, 480, 0xff999999);
+		right.makeGraphic(20, 480, 0xff034932);
 		right.immovable = true;
 		walls.add(right);
 
 		var top = new FlxSprite(0, 0);
-		top.makeGraphic(640, 20, 0xff999999);
+		top.makeGraphic(640, 20, 0xff034932);
 		top.immovable = true;
 		walls.add(top);
 	}
@@ -61,7 +65,7 @@ class PlayState extends FlxState
 	private function createBall(): Void
 	{
 		ball = new FlxSprite(310, 320);
-		ball.makeGraphic(20, 20, 0xffaa2200);
+		ball.makeGraphic(20, 20, 0xffce8b69);
 		ball.elasticity = 1;
 		ball.maxVelocity.set(300, 300);
 		ball.velocity.y = 300;
@@ -78,7 +82,8 @@ class PlayState extends FlxState
 			for (j in 0...4)
 			{
 				var brick = new FlxSprite(i * (60 + 5) + 30 + 65, j * (40 + 5) + 30 + 45);
-				brick.makeGraphic(60, 40, 0xff00aa00);
+				var color = BRICK_COLOR[FlxRandom.intRanged(0, BRICK_COLOR.length - 1)];
+				brick.makeGraphic(60, 40, color);
 				brick.immovable = true;
 				bricks.add(brick);
 			}
