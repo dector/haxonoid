@@ -1,5 +1,7 @@
 package;
 
+import flixel.effects.particles.FlxParticle;
+import flixel.effects.particles.FlxEmitter;
 import flixel.FlxObject;
 import flixel.FlxObject;
 import flixel.util.FlxRandom;
@@ -21,6 +23,8 @@ class PlayState extends FlxState
 	private var ball: FlxSprite;
 	private var bricks: FlxGroup;
 
+	private var emitter: FlxEmitter;
+
 	override public function create():Void
 	{
 		super.create();
@@ -31,6 +35,7 @@ class PlayState extends FlxState
 		createWalls();
 		createBall();
 		createBricks();
+		createEmitter();
 	}
 
 	private function createBat(): Void
@@ -87,6 +92,22 @@ class PlayState extends FlxState
 				brick.immovable = true;
 				bricks.add(brick);
 			}
+		}
+	}
+
+	private function createEmitter(): Void
+	{
+		emitter = new FlxEmitter(0, 0);
+		emitter.maxSize = 10;
+		add(emitter);
+
+		for (i in 0...10)
+		{
+			var particle = new FlxParticle();
+			particle.makeGraphic(5, 5, 0xffffffff);
+			particle.visible = false;
+			particle.useFading = true;
+			emitter.add(particle);
 		}
 	}
 	
@@ -155,5 +176,9 @@ class PlayState extends FlxState
 	private function beatBrick(ball: FlxObject, brick: FlxObject): Void
 	{
 		brick.kill();
+
+		emitter.x = brick.x + brick.width / 2;
+		emitter.y = brick.y + brick.height / 2;
+		emitter.start(true, 2);
 	}
 }
