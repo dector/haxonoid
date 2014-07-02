@@ -10,6 +10,9 @@ import flixel.util.FlxMath;
 
 class MenuState extends FlxState
 {
+	private static inline var MENU_START = "Start Game";
+	private static inline var MENU_CATS = "Show me cat!";
+
 	private var menuValue1: TwoStateText;
 	private var menuValue2: TwoStateText;
 
@@ -19,11 +22,11 @@ class MenuState extends FlxState
 
 		FlxG.camera.bgColor = 0xff222222;
 
-		menuValue1 = new TwoStateText(20, 200, 600, "Start Game", 15);
+		menuValue1 = new TwoStateText(20, 200, 600, "> " + MENU_START + " <", 15);
 		menuValue1.antialiasing = true;
 		menuValue1.alignment = "center";
 
-		menuValue2 = new TwoStateText(20, 240, 600, "Show me cat!", 15);
+		menuValue2 = new TwoStateText(20, 240, 600, MENU_CATS, 15);
 		menuValue2.antialiasing = true;
 		menuValue2.alignment = "center";
 
@@ -42,30 +45,15 @@ class MenuState extends FlxState
 	{
 		super.update();
 
-		if (FlxG.keys.justPressed.UP)
+		if (FlxG.keys.justPressed.UP || FlxG.keys.justPressed.DOWN)
 		{
 			if (menuValue1.selected)
 			{
-				menuValue1.selected = false;
-				menuValue2.selected = true;
+				select(1);
 			}
 			else if (menuValue2.selected)
 			{
-				menuValue1.selected = true;
-				menuValue2.selected = false;
-			}
-		}
-		else if (FlxG.keys.justPressed.DOWN)
-		{
-			if (menuValue1.selected)
-			{
-				menuValue1.selected = false;
-				menuValue2.selected = true;
-			}
-			else if (menuValue2.selected)
-			{
-				menuValue1.selected = true;
-				menuValue2.selected = false;
+				select(0);
 			}
 		}
 
@@ -80,5 +68,22 @@ class MenuState extends FlxState
 				FlxG.switchState(new AboutState());
 			}
 		}
-	}	
+	}
+
+	private function select(position: Int)
+	{
+		switch (position)
+		{
+			case 0:
+				menuValue1.selected = true;
+				menuValue2.selected = false;
+				menuValue1.text = "> " + MENU_START + " <";
+				menuValue2.text = MENU_CATS;
+			case 1:
+				menuValue1.selected = false;
+				menuValue2.selected = true;
+				menuValue1.text = MENU_START;
+				menuValue2.text = "> " + MENU_CATS + " <";
+		}
+	}
 }

@@ -31,6 +31,8 @@ class PlayState extends FlxState
 
 		FlxG.camera.bgColor = 0xff276004;
 
+		Context.gameState = Context.IN_PROGRESS;
+
 		createBat();
 		createWalls();
 		createBall();
@@ -118,10 +120,15 @@ class PlayState extends FlxState
 
 	override public function update():Void
 	{
-		super.update();
+		if (Context.gameState == Context.IN_PROGRESS)
+		{
+			super.update();
 
-		moveBat();
-		checkCollisions();
+			moveBat();
+			checkCollisions();
+			checkHell();
+			checkHeaven();
+		}
 	}
 
 	private function moveBat(): Void
@@ -156,6 +163,24 @@ class PlayState extends FlxState
 		FlxG.collide(ball, bricks, beatBrick);
 	}
 
+	private function checkHell(): Void
+	{
+		if (ball.y > 520)
+		{
+			Context.gameState = Context.GAME_OVER;
+			FlxG.camera.fade(0xff000000, 1, false, gotoHellOrHeaven, true);
+		}
+	}
+
+	private function checkHeaven(): Void
+	{
+		if (bricks.countLiving() <= 0 || FlxG.keys.justPressed.ENTER)
+		{
+			Context.gameState = Context.WINNER;
+			FlxG.camera.fade(0xffffffff, 1, false, gotoHellOrHeaven, true);
+		}
+	}
+
 	private function beatHappens(ball: FlxObject, bat: FlxObject): Void
 	{
 		var batmid = bat.x + bat.width / 2;
@@ -180,5 +205,10 @@ class PlayState extends FlxState
 		emitter.x = brick.x + brick.width / 2;
 		emitter.y = brick.y + brick.height / 2;
 		emitter.start(true, 2);
+	}
+
+	private function gotoHellOrHeaven(): Void
+	{
+		FlxG.switchState(new InfoState());
 	}
 }
