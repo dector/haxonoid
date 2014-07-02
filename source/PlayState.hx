@@ -134,6 +134,16 @@ class PlayState extends FlxState
         {
             FlxG.switchState(new MenuState());
         }
+        else if (FlxG.keys.justPressed.H)
+        {
+            var alive = bricks.countLiving();
+            var killed = 0;
+            while (killed < alive / 2)
+            {
+                bricks.getFirstAlive().kill();
+                killed++;
+            }
+        }
 	}
 
 	private function moveBat(): Void
