@@ -129,6 +129,11 @@ class PlayState extends FlxState
 			checkHell();
 			checkHeaven();
 		}
+
+        if (FlxG.keys.justPressed.ESCAPE)
+        {
+            FlxG.switchState(new MenuState());
+        }
 	}
 
 	private function moveBat(): Void
