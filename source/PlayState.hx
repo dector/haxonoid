@@ -31,6 +31,7 @@ class PlayState extends FlxState
 	{
 		bat = new FlxSprite(270, 420);
 		bat.makeGraphic(100, 20, 0xffffffff);
+		bat.immovable = true;
 		add(bat);
 	}
 
@@ -41,14 +42,17 @@ class PlayState extends FlxState
 
 		var left = new FlxSprite(0, 0);
 		left.makeGraphic(20, 480, 0xff999999);
+		left.immovable = true;
 		walls.add(left);
 
 		var right = new FlxSprite(620, 0);
 		right.makeGraphic(20, 480, 0xff999999);
+		right.immovable = true;
 		walls.add(right);
 
 		var top = new FlxSprite(0, 0);
 		top.makeGraphic(640, 20, 0xff999999);
+		top.immovable = true;
 		walls.add(top);
 	}
 
@@ -56,6 +60,7 @@ class PlayState extends FlxState
 	{
 		ball = new FlxSprite(300, 220);
 		ball.makeGraphic(20, 20, 0xffaa2200);
+		ball.elasticity = 1;
 		ball.maxVelocity.set(300, 300);
 		ball.velocity.x = FlxRandom.intRanged(-200, 200);
 		ball.velocity.y = 300;
