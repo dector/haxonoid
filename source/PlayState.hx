@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxPool;
 import flixel.effects.particles.FlxParticle;
 import flixel.effects.particles.FlxEmitter;
 import flixel.FlxObject;
@@ -23,8 +24,6 @@ class PlayState extends FlxState
 	private var ball: FlxSprite;
 	private var bricks: FlxGroup;
 
-	private var emitter: FlxEmitter;
-
 	override public function create():Void
 	{
 		super.create();
@@ -37,7 +36,6 @@ class PlayState extends FlxState
 		createWalls();
 		createBall();
 		createBricks();
-		createEmitter();
 	}
 
 	private function createBat(): Void
@@ -90,29 +88,14 @@ class PlayState extends FlxState
 			{
 				var brick = new FlxSprite(i * (60 + 5) + 30 + 65, j * (40 + 5) + 30 + 45);
 				var color = BRICK_COLOR[FlxRandom.intRanged(0, BRICK_COLOR.length - 1)];
-				brick.makeGraphic(60, 40, color);
+				brick.makeGraphic(60, 40, 0xffffffff);
+				brick.color = color;
 				brick.immovable = true;
 				bricks.add(brick);
 			}
 		}
 	}
 
-	private function createEmitter(): Void
-	{
-		emitter = new FlxEmitter(0, 0);
-		emitter.maxSize = 10;
-		add(emitter);
-
-		for (i in 0...10)
-		{
-			var particle = new FlxParticle();
-			particle.makeGraphic(5, 5, 0xffffffff);
-			particle.visible = false;
-			particle.useFading = true;
-			emitter.add(particle);
-		}
-	}
-	
 	override public function destroy():Void
 	{
 		super.destroy();
@@ -204,9 +187,9 @@ class PlayState extends FlxState
 
 	private function checkCollisions(): Void
 	{
-		FlxG.collide(ball, walls, beatWall);
 		FlxG.collide(ball, bat, beatHappens);
 		FlxG.collide(ball, bricks, beatBrick);
+		FlxG.collide(ball, walls, beatWall);
 	}
 
 	private function checkHell(): Void
@@ -256,6 +239,22 @@ class PlayState extends FlxState
 	private function beatBrick(ball: FlxObject, brick: FlxObject): Void
 	{
 		brick.kill();
+
+		// FIXME use pool
+		var emitter = new FlxEmitter();
+		emitter.maxSize = 10;
+		add(emitter);
+
+		var brickSprite = cast(brick, FlxSprite);
+
+		for (i in 0...10)
+		{
+			var particle = new FlxParticle();
+			particle.makeGraphic(5, 5, brickSprite.color | 0xff << 24);
+			particle.visible = false;
+			particle.useFading = true;
+			emitter.add(particle);
+		}
 
 		emitter.x = brick.x + brick.width / 2;
 		emitter.y = brick.y + brick.height / 2;
