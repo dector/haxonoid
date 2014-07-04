@@ -74,7 +74,7 @@ class PlayState extends FlxState
 		ball = new FlxSprite(310, 320);
 		ball.makeGraphic(20, 20, 0xffce8b69);
 		ball.elasticity = 1;
-		ball.maxVelocity.set(300, 300);
+		ball.maxVelocity.set(200, 200);
 		ball.velocity.y = 300;
 		add(ball);
 	}
@@ -161,6 +161,10 @@ class PlayState extends FlxState
 			bat.velocity.x = 0;
 		}
 
+		#if touch_support
+			moveBat_touch();
+		#end
+
 		if (bat.x < 0)
 		{
 			bat.x = 0;
@@ -169,6 +173,33 @@ class PlayState extends FlxState
 		{
 			bat.x = 540;
 		}
+	}
+
+	private function moveBat_touch(): Void {
+		if (FlxG.mouse.pressed) {
+			var futureX = FlxG.mouse.screenX - FlxG.worldBounds.left;
+			var currentX = bat.x + bat.width / 2 - FlxG.worldBounds.left;
+
+			var gap = gap(currentX, futureX);
+
+			if (gap > 0 && bat.x < 520) {
+				bat.velocity.x = 500;
+			} else if (gap < 0 && bat.x > 20) {
+				bat.velocity.x = -500;
+			} else {
+				bat.velocity.x = 0;
+			}
+		} else {
+			bat.velocity.x = 0;
+		}
+	}
+
+	private function gap(xFrom: Float, xTo: Float): Float
+	{
+		var gap = xTo - xFrom;
+		if (Math.abs(gap) > 2) {
+			return gap;
+		} else return 0;
 	}
 
 	private function checkCollisions(): Void

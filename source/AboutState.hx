@@ -33,7 +33,7 @@ class AboutState extends FlxState
 	{
 		super.update();
 
-		if (FlxG.keys.justPressed.SPACE)
+		if (FlxG.keys.justPressed.SPACE || (Context.TOUCH && FlxG.mouse.justPressed))
 		{
 			switch (image.animation.curAnim.name)
 			{

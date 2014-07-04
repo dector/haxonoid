@@ -68,6 +68,21 @@ class MenuState extends FlxState
 				FlxG.switchState(new AboutState());
 			}
 		}
+
+		#if touch_support
+			if (FlxG.mouse.justPressed) {
+				var x = FlxG.mouse.screenX;
+				var y = FlxG.mouse.screenY;
+
+				if (menuValue1.x <= x && x <= menuValue1.x + menuValue1.width
+					&& menuValue1.y <= y && y <= menuValue1.y + menuValue1.height) {
+					FlxG.switchState(new PlayState());
+				} else if (menuValue2.x <= x && x <= menuValue2.x + menuValue2.width
+					&& menuValue2.y <= y && y <= menuValue2.y + menuValue2.height) {
+					FlxG.switchState(new AboutState());
+				}
+			}
+		#end
 	}
 
 	private function select(position: Int)
