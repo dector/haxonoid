@@ -1,4 +1,4 @@
-package;
+package states;
 
 import flixel.util.FlxPool;
 import flixel.effects.particles.FlxParticle;
