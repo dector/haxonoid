@@ -216,13 +216,14 @@ class PlayState extends FlxState
 
 	private function beatHappens(ball: FlxObject, bat: FlxObject): Void {
         var ballX = ball.x + ball.width / 2;
-        var batX1 = bat.x + bat.width / 4;
-        var batX2 = bat.x + 3 * bat.width / 4;
+        var batX = bat.x + bat.width / 2;
+        var batXL = bat.x + bat.width / 4;
+        var batXR = bat.x + 3 * bat.width / 4;
 
-        if (ballX < batX1 && ball.velocity.x > 0
-                || ballX > batX2 && ball.velocity.x < 0) {
+        if (ballX < batXL && ball.velocity.x > 0
+                || ballX > batXR && ball.velocity.x < 0) {
             ball.velocity.x = - ball.velocity.x;
-        } else if (bat.x + bat.width / 2 == ball.x + ball.width / 2) {
+        } else if (batX - ball.width / 4 <= ballX && ballX <= batX + ball.width / 4) {
             ball.velocity.x = FlxRandom.floatRanged(-1, 1, [0]) * ball.velocity.y;
     }
 
