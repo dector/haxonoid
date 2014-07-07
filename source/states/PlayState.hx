@@ -103,15 +103,15 @@ class PlayState extends FlxState
 
 	override public function update():Void
 	{
-		if (Context.gameState == Context.IN_PROGRESS)
-		{
-			super.update();
+        super.update();
 
-			moveBat();
-			checkCollisions();
+        moveBat();
+        checkCollisions();
+
+        if (Context.gameState == Context.IN_PROGRESS) {
 			checkHell();
-			checkHeaven();
-		}
+            checkHeaven();
+        }
 
         if (FlxG.keys.justPressed.ESCAPE)
         {
@@ -192,21 +192,18 @@ class PlayState extends FlxState
 		FlxG.collide(ball, walls, beatWall);
 	}
 
-	private function checkHell(): Void
-	{
-		if (ball.y > 520)
-		{
+	private function checkHell(): Void {
+		if (ball.y > 520) {
 			Context.gameState = Context.GAME_OVER;
 			FlxG.camera.fade(0xff000000, 1, false, gotoHellOrHeaven, true);
             FlxG.sound.playMusic("assets/fail.wav", 1, false);
 		}
 	}
 
-	private function checkHeaven(): Void
-	{
-		if (bricks.countLiving() <= 0)
-		{
+	private function checkHeaven(): Void {
+		if (bricks.countLiving() <= 0) {
 			Context.gameState = Context.WINNER;
+            ball.velocity.set();
 			FlxG.camera.fade(0xffffffff, 1, false, gotoHellOrHeaven, true);
             FlxG.sound.playMusic("assets/win.wav", 1, false);
 		}
@@ -226,7 +223,7 @@ class PlayState extends FlxState
                 || ballX > batX2 && ball.velocity.x < 0) {
             ball.velocity.x = - ball.velocity.x;
         } else if (bat.x + bat.width / 2 == ball.x + ball.width / 2) {
-            ball.velocity.x = FlxRandom.floatRanged(-1, 1) * ball.velocity.y;
+            ball.velocity.x = FlxRandom.floatRanged(-1, 1, [0]) * ball.velocity.y;
     }
 
         FlxG.sound.play("assets/bat.wav");
