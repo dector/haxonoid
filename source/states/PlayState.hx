@@ -1,5 +1,6 @@
 package states;
 
+import flixel.input.gamepad.XboxButtonID;
 import flixel.util.FlxPool;
 import flixel.effects.particles.FlxParticle;
 import flixel.effects.particles.FlxEmitter;
@@ -131,11 +132,13 @@ class PlayState extends FlxState
 
 	private function moveBat(): Void
 	{
-		if (FlxG.keys.pressed.LEFT && bat.x > 20)
+        var gamepad = FlxG.gamepads.lastActive;
+
+		if ((FlxG.keys.pressed.LEFT || gamepad != null && gamepad.pressed(XboxButtonID.DPAD_LEFT)) && bat.x > 20)
 		{
 			bat.velocity.x = -500;
 		}
-		else if (FlxG.keys.pressed.RIGHT && bat.x < 520)
+		else if ((FlxG.keys.pressed.RIGHT || gamepad != null && gamepad.pressed(XboxButtonID.DPAD_RIGHT)) && bat.x < 520)
 		{
 			bat.velocity.x = 500;
 		}

@@ -1,5 +1,6 @@
 package states;
 
+import flixel.input.gamepad.XboxButtonID;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxState;
@@ -42,7 +43,9 @@ class InfoState extends FlxState
 	{
 		super.update();
 
-		if (FlxG.keys.justPressed.SPACE || (Context.TOUCH && FlxG.mouse.justPressed))
+        var gamepad = FlxG.gamepads.lastActive;
+
+		if (FlxG.keys.justPressed.SPACE || (Context.TOUCH && FlxG.mouse.justPressed) || gamepad != null && gamepad.justPressed(XboxButtonID.A))
 		{
 			switch (Context.gameState)
 			{
