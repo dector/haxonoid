@@ -1,6 +1,6 @@
 package states;
 
-import flixel.input.gamepad.XboxButtonID;
+import input.Input;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxState;
@@ -39,16 +39,11 @@ class InfoState extends FlxState
 		add(secondaryText);
 	}
 
-	public override function update(): Void
-	{
+	public override function update(): Void {
 		super.update();
 
-        var gamepad = FlxG.gamepads.lastActive;
-
-		if (FlxG.keys.justPressed.SPACE || (Context.TOUCH && FlxG.mouse.justPressed) || gamepad != null && gamepad.justPressed(XboxButtonID.A))
-		{
-			switch (Context.gameState)
-			{
+		if (Input.action()) {
+			switch (Context.gameState) {
 				case Context.GAME_OVER:
                     FlxG.sound.pause();
 					FlxG.switchState(new PlayState());

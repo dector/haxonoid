@@ -1,12 +1,9 @@
 package states;
 
-import flixel.input.gamepad.XboxButtonID;
-import flixel.util.FlxPool;
+import input.Input;
 import flixel.effects.particles.FlxParticle;
 import flixel.effects.particles.FlxEmitter;
 import flixel.FlxObject;
-import flixel.FlxObject;
-import flixel.util.FlxRandom;
 import flixel.util.FlxRandom;
 import flixel.group.FlxGroup;
 import flixel.FlxG;
@@ -114,16 +111,14 @@ class PlayState extends FlxState
             checkHeaven();
         }
 
-        if (FlxG.keys.justPressed.ESCAPE)
-        {
+        if (Input.back()) {
             FlxG.switchState(new MenuState());
         }
-        else if (FlxG.keys.justPressed.H)
-        {
+
+        if (Context.DEBUG && FlxG.keys.justPressed.H) {
             var alive = bricks.countLiving();
             var killed = 0;
-            while (killed < alive / 2)
-            {
+            while (killed < alive / 2) {
                 bricks.getFirstAlive().kill();
                 killed++;
             }
@@ -134,58 +129,62 @@ class PlayState extends FlxState
 	{
         var gamepad = FlxG.gamepads.lastActive;
 
-		if ((FlxG.keys.pressed.LEFT || gamepad != null && gamepad.pressed(XboxButtonID.DPAD_LEFT)) && bat.x > 20)
-		{
-			bat.velocity.x = -500;
-		}
-		else if ((FlxG.keys.pressed.RIGHT || gamepad != null && gamepad.pressed(XboxButtonID.DPAD_RIGHT)) && bat.x < 520)
-		{
-			bat.velocity.x = 500;
-		}
-		else
-		{
-			bat.velocity.x = 0;
+		if (Input.left() && bat.x > 20) {
+			moveBatLeft();
+		} else if (Input.right() && bat.x < 520) {
+			moveBatRight();
+		} else if (! moveBat_touch()) {
+            stopBat();
 		}
 
-		#if touch_support
-			moveBat_touch();
-		#end
-
-		if (bat.x < 0)
-		{
+		if (bat.x < 0) {
 			bat.x = 0;
-		}
-		else if (bat.x > 540)
-		{
+		} else if (bat.x > 540) {
 			bat.x = 540;
 		}
 	}
 
-	private function moveBat_touch(): Void {
-		if (FlxG.mouse.pressed) {
-			var futureX = FlxG.mouse.screenX - FlxG.worldBounds.left;
-			var currentX = bat.x + bat.width / 2 - FlxG.worldBounds.left;
+	private function moveBat_touch(): Bool {
+        if (! FlxG.mouse.pressed) {
+            return false;
+        }
 
-			var gap = gap(currentX, futureX);
+        var futureX = FlxG.mouse.screenX - FlxG.worldBounds.left;
+        var currentX = bat.x + bat.width / 2 - FlxG.worldBounds.left;
 
-			if (gap > 0 && bat.x < 520) {
-				bat.velocity.x = 500;
-			} else if (gap < 0 && bat.x > 20) {
-				bat.velocity.x = -500;
-			} else {
-				bat.velocity.x = 0;
-			}
-		} else {
-			bat.velocity.x = 0;
-		}
+        var gap = gap(currentX, futureX);
+
+        if (gap > 0 && bat.x < 520) {
+            moveBatRight();
+        } else if (gap < 0 && bat.x > 20) {
+            moveBatLeft();
+        } else {
+            return false;
+        }
+
+        return true;
 	}
+
+    private inline function moveBatLeft(): Void {
+        bat.velocity.x = -500;
+    }
+
+    private inline function moveBatRight(): Void {
+        bat.velocity.x = 500;
+    }
+
+    private inline function stopBat(): Void {
+        bat.velocity.x = 0;
+    }
 
 	private function gap(xFrom: Float, xTo: Float): Float
 	{
 		var gap = xTo - xFrom;
 		if (Math.abs(gap) > 2) {
 			return gap;
-		} else return 0;
+		} else {
+            return 0;
+        }
 	}
 
 	private function checkCollisions(): Void

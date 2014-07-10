@@ -82,6 +82,5 @@
 
     <!-- Android -->
 	<android target-sdk-version="19" />
-    <haxedef name="touch_support" if="android" />
 
 </project>
