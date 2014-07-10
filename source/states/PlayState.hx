@@ -70,7 +70,7 @@ class PlayState extends FlxState
 		ball = new FlxSprite(310, 320);
 		ball.makeGraphic(20, 20, 0xffce8b69);
 		ball.elasticity = 1;
-		ball.maxVelocity.set(200, 200);
+		ball.maxVelocity.set(300, 300);
 		ball.velocity.y = 300;
 		add(ball);
 	}
@@ -217,17 +217,15 @@ class PlayState extends FlxState
     }
 
 	private function beatHappens(ball: FlxObject, bat: FlxObject): Void {
-        var ballX = ball.x + ball.width / 2;
-        var batX = bat.x + bat.width / 2;
-        var batXL = bat.x + bat.width / 4;
-        var batXR = bat.x + 3 * bat.width / 4;
+        var batmid = bat.x + bat.width / 2;
+        var ballmid = ball.x + ball.width / 2;
 
-        if (ballX < batXL && ball.velocity.x > 0
-                || ballX > batXR && ball.velocity.x < 0) {
-            ball.velocity.x = - ball.velocity.x;
-        } else if (batX - ball.width / 4 <= ballX && ballX <= batX + ball.width / 4) {
-            ball.velocity.x = FlxRandom.floatRanged(-1, 1, [0]) * ball.velocity.y;
-    }
+        if (batmid != ballmid) {
+            ball.velocity.x = 10 * (ballmid - batmid);
+        } else {
+            var diff = cast(bat.width / 4 - ball.width / 4, Int);
+            ball.velocity.x = 10 * FlxRandom.intRanged(-diff, diff);
+        }
 
         FlxG.sound.play("assets/bat.wav");
 	}
